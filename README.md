@@ -32,7 +32,10 @@ node .
 ```
 
 # Usage:
-
+Normal start with the select menu:
+```
+node .
+```
 Auto-Host without Picking options:
 ```
 node . host
