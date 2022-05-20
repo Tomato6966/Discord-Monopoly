@@ -48,3 +48,8 @@ Auto-Host without Picking options + Deploy:
 ```
 node . deploy host
 ```
+
+pm2 Host Command:
+```
+pm2 start index.js --name Monpoly_Discord_Bot -- host
+```
