@@ -12,12 +12,11 @@ Following Repos I am using, **INCLUDED** in nodejs
 - crypto
 
 # USAGE:
-
-> Download the .exe / Linux / macOS File
-> Execute it
-> Paste a Token, it will create a file called config.json with it in it
-> Then pick start & Deploy (or just start, if you deployed before)
-> The Bot will be online and useable
+- Download the .exe / Linux / macOS File
+- Execute it
+- Paste a Token, it will create a file called config.json with it in it 
+- Then pick start & Deploy (or just start, if you deployed before)
+- The Bot will be online and useable
 
 # Preperation (ONLY NEEDED IF YOU WANT TO USE THE SOURCE CODE)
 
