@@ -1,5 +1,15 @@
 # Discord-Monopoly
-New Documatic Hackathon Github Repo
+This is my Documatic Hackathon submission, for the Topic: Discord Games.
+
+The Theme is MONOPOLY, and yes idk if it's copyright-allowed or not, I won't make it an public Bot, no worries, it's just for the competition.
+
+Following repos I am using, which are not nodejs included:
+- discord.js # For connecting to discord
+- inquirer # For Command Line Select Menus
+
+Following Repos I am using, **INCLUDED** in nodejs
+- fs # Filesystem
+- crypto
 
 # USAGE:
 
@@ -25,19 +35,14 @@ node .
 # Usage:
 
 Auto-Host without Picking options:
-
 ```
 node . host
 ```
-
 Auto-Deploy without Picking deploy:
-
 ```
 node . deploy
 ```
-
 Auto-Host without Picking options + Deploy:
-
 ```
 node . deploy host
 ```
