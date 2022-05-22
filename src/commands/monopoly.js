@@ -383,7 +383,7 @@ module.exports = {
                         }).catch(console.warn);
                     }
 
-                    this.sendReminderPing(game);
+                    this.sendReminderPing(client, game);
                     
                     await interaction.editReply({
                         content: `✅ Started the Game, the first Player is: <@${curPlayerInfo.id}>`
@@ -456,12 +456,12 @@ module.exports = {
                             await game.gameMessage.edit(this.getGameMessage(client, game, await this.getBoardAttachment(game))).catch(console.warn);
                     
                             // next player's turn
-                            this.sendReminderPing(game);
+                            this.sendReminderPing(client, game);
                             
                             return;
                         } else {
                             // Move to jail
-                            if(game.joinedPlayers[game.currentPlayerIndex].doubleThrows == 2) {
+                            if(game.joinedPlayers[game.currentPlayerIndex].doubleThrows == 3) {
                                 game.joinedPlayers[game.currentPlayerIndex].doubleThrows = 0;
                                 game.joinedPlayers[game.currentPlayerIndex].currentFieldPosition = 10;
                                 game.joinedPlayers[game.currentPlayerIndex].isJail = true;
@@ -492,7 +492,7 @@ module.exports = {
                                 await game.gameMessage.edit(this.getGameMessage(client, game, await this.getBoardAttachment(game))).catch(console.warn);
                                 
                                 // next player's turn
-                                this.sendReminderPing(game);
+                                this.sendReminderPing(client, game);
                                 
                                 return;
                             }
@@ -526,7 +526,7 @@ module.exports = {
                             await game.gameMessage.edit(this.getGameMessage(client, game, await this.getBoardAttachment(game))).catch(console.warn);
                             
                             // next player's turn
-                            this.sendReminderPing(game);
+                            this.sendReminderPing(client, game);
                             
                             return;
                         }
@@ -547,7 +547,7 @@ module.exports = {
                             if(game.currentPlayerIndex >= game.joinedPlayers.length) game.currentPlayerIndex = 0;
                             
                             // next player's turn
-                            this.sendReminderPing(game);
+                            this.sendReminderPing(client, game);
                             
                             return true;
                         } else {
@@ -588,7 +588,7 @@ module.exports = {
                     await game.gameMessage.edit(this.getGameMessage(client, game, await this.getBoardAttachment(game))).catch(console.warn);
                      
                     // next player's turn
-                    this.sendReminderPing(game);
+                    this.sendReminderPing(client, game);
                     
                     return true;
                 } break;
@@ -754,6 +754,13 @@ module.exports = {
                         }
                         return true;
                     }
+                    if([5, 15, 25, 35].includes(newField)) {
+                        await RollingMessage.edit({
+                            content: `${extraText}\n\nLanded on own TRAIN-STATION`,
+                            files: this.gameData.fields[newField].image?.length > 5 ? [new MessageAttachment(this.gameData.fields[newField].image, "field_image.png")] : [],
+                        }).then(m => setTimeout(() => m.delete().catch(console.warn), 4_000)).catch(console.warn);
+                        return true;
+                    }
                     const housePrice = this.gameData.fields[newField].houses_price || this.gameData.fields[newField].price
                     if(game.joinedPlayers[game.currentPlayerIndex].money < housePrice) {
                         return await RollingMessage.edit({
@@ -910,13 +917,13 @@ module.exports = {
      * @param {*} game GameData 
      * @returns timeou
      */
-    async sendReminderPing(game, timeout = 2_500) {
+    async sendReminderPing(client, game, timeout = 2_500) {
         if(game.rolling) {
             game.rolling = false;
             game.gameMessage.edit(this.getGameMessage(client, game, await this.getBoardAttachment(game))).catch(console.warn);
         } else {
             game.gameMessage.fetch().then(async m => {
-                if(m.components[0][0].disabled == true) {
+                if(m.components[0]?.components?.[0]?.disabled == true) {
                     game.rolling = false;
                     game.gameMessage.edit(this.getGameMessage(client, game, await this.getBoardAttachment(game))).catch(console.warn);
                 }
