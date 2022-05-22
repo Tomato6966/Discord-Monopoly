@@ -53,3 +53,12 @@ pm2 Host Command:
 ```
 pm2 start index.js --name Monpoly_Discord_Bot -- host
 ```
+
+
+Bugs:
+
+Due to time sakes, many features are unfinished and might be buggy at the time.
+But I still think, I did good for coding 6hours on that project!
+
+Buying houses also works!
+![image](https://user-images.githubusercontent.com/68145571/169716916-86a168b2-a259-4b4b-a9ae-cde0eb4f5de7.png)
