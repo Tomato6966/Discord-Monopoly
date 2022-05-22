@@ -4,13 +4,12 @@
  * node index.js deploy # Deploys the Commands for sure!
  * node index.js deploy host # starts the bot in the "host" Mode + deploys the Slash Commands
  */
-const inquirer = require('inquirer'), fs = require("fs"), DiscordBotClient = require("./src/bot.js"), processOptions = process.argv.map(d => d.toLowerCase());
+const inquirer = require('inquirer'), fs = require("fs"), DiscordBotClient = require(`${process.cwd()}/src/bot.js`), processOptions = process.argv.map(d => d.toLowerCase());
 // start the first question
 askBootup();
 // ask Bootup thingy
 function askBootup() {
     const configExist = fs.existsSync(`${process.cwd()}/config.json`);
-    console.log(`${process.cwd()}/config.json`)
     // ask question
     const questions = !configExist ? [{
             type: "input", name: "token", message: "No Config File - What is your BOT-TOKEN? Please insert it!",
@@ -51,3 +50,9 @@ function askBootup() {
         }
     }).catch((e) => e.isTtyError ? console.error(`Prompt couldn't be rendered in the current environment`) : console.error(e));
 }
+
+process.on('unhandledRejection', (reason, p) => {
+    console.log('\n\n\n\n\n=== unhandled Rejection ==='.toUpperCase(),'\nReason: ', reason.stack ? reason.stack : reason, '\n=== unhandled Rejection ===\n\n\n\n\n'.toUpperCase());
+}).on("uncaughtException", (err, origin) => {
+    console.log('\n\n\n\n\n\n=== uncaught Exception ==='.toUpperCase(),'\nException: ', err.stack ? err.stack : err, '=== uncaught Exception ===\n\n\n\n\n'.toUpperCase())
+}).on('uncaughtExceptionMonitor', (err, origin) => { }).on('multipleResolves', (type, promise, reason) => { });

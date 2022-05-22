@@ -22,15 +22,12 @@ class DiscordBotClient {
      * @returns Boolean
      */
     loadSlash() {
-        /*const cmds = readdirSync(`${process.cwd()}/src/commands`).filter((f) => f.endsWith(`.js`));
+        const cmds = readdirSync(`${process.cwd()}/src/commands`).filter((f) => f.endsWith(`.js`));
         for(const file of cmds) {
-            const cmd = require(`${process.cwd()}/src/commands/ping.js`);
+            const cmd = require(`${process.cwd()}/src/commands/${file}`);
             this.client.allCommands.push(cmd.cmdData);
             this.client.slashCommands.set(cmd.cmdData.name, cmd);
-        }*/
-        const cmd = require(`${process.cwd()}/src/commands/ping.js`);
-        this.client.allCommands.push(cmd.cmdData);
-        this.client.slashCommands.set(cmd.cmdData.name, cmd);
+        }
         return true;
     }
 
@@ -40,19 +37,11 @@ class DiscordBotClient {
      * @returns Boolean
      */
     loadEvents() {
-        
-        var event = require(`${process.cwd()}/src/events/interactionCreate.js`)
-        this.client.on(file.split(`.`)[0], event.bind(null, this.client));
-        
-        var event = require(`${process.cwd()}/src/events/ready.js`)
-        this.client.on(file.split(`.`)[0], event.bind(null, this.client));
-/*
         const events = readdirSync(`${process.cwd()}/src/events/`).filter((f) => f.endsWith(`.js`));
         for(const file of events) {
-            const event = require(`${process.cwd()}/src/events/interactionCreate.js`)
+            const event = require(`${process.cwd()}/src/events/${file}`)
             this.client.on(file.split(`.`)[0], event.bind(null, this.client));
         }
-*/
         return true;
     }
 
