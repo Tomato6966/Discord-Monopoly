@@ -658,11 +658,7 @@ module.exports = {
         // Move over the START FIELD  
         if(game.joinedPlayers[game.currentPlayerIndex].movedStart) {
             game.joinedPlayers[game.currentPlayerIndex].movedStart = false;
-            await RollingMessage.edit({
-                content: `${extraText}\n\n${this.gameData.playerEmojis[game.currentPlayerIndex]} **Player ${game.currentPlayerIndex + 1}** moved over \`${this.gameData.fields[0].card}\` and will get __${this.gameData.fields[0].price}__ ${this.gameData.moneyEmoji}`,
-                files: this.gameData.fields[newField].image?.length > 5 ? [new MessageAttachment(this.gameData.fields[0].image, "field_image.png")] : [],
-            }).then(m => setTimeout(() => m.delete().catch(console.warn), 4_000)).catch(console.warn);
-
+            extraText += `\n\n${this.gameData.playerEmojis[game.currentPlayerIndex]} **Player ${game.currentPlayerIndex + 1}** moved over \`${this.gameData.fields[0].card}\` and will get __${this.gameData.fields[0].price}__ ${this.gameData.moneyEmoji}`
             game.joinedPlayers[game.currentPlayerIndex].money += this.gameData.fields[newField].price 
         }
 
@@ -754,6 +750,8 @@ module.exports = {
                         }
                         return true;
                     }
+                    
+                    // if it's a train station
                     if([5, 15, 25, 35].includes(newField)) {
                         await RollingMessage.edit({
                             content: `${extraText}\n\nLanded on own TRAIN-STATION`,
@@ -761,6 +759,15 @@ module.exports = {
                         }).then(m => setTimeout(() => m.delete().catch(console.warn), 4_000)).catch(console.warn);
                         return true;
                     }
+                    // if it's a electricity or water worker
+                    if(newField == 12 || newField == 28) {
+                        await RollingMessage.edit({
+                            content: `${extraText}\n\nLanded on own ${this.gameData.fields[newField].card}`,
+                            files: this.gameData.fields[newField].image?.length > 5 ? [new MessageAttachment(this.gameData.fields[newField].image, "field_image.png")] : [],
+                        }).then(m => setTimeout(() => m.delete().catch(console.warn), 4_000)).catch(console.warn);
+                        return true;
+                    }
+
                     const housePrice = this.gameData.fields[newField].houses_price || this.gameData.fields[newField].price
                     if(game.joinedPlayers[game.currentPlayerIndex].money < housePrice) {
                         return await RollingMessage.edit({
@@ -858,10 +865,10 @@ module.exports = {
                 if(game.joinedPlayers[game.currentPlayerIndex].money < this.gameData.fields[newField].price) {
                     return await RollingMessage.edit({
                         content: `${extraText}\n\n${this.gameData.playerEmojis[game.currentPlayerIndex]} **Player ${game.currentPlayerIndex + 1}** landed on \`${this.gameData.fields[newField].card}\` which costs ${this.gameData.fields[newField].price} ${this.gameData.moneyEmoji}\n> Not enough money for it!`,
-                    }).catch(console.warn);
+                    }).then(m => setTimeout(() => m.delete().catch(console.warn), 4_000)).catch(console.warn);
                 }
                 const msg = await RollingMessage.edit({
-                    content: `${extraText}\n\n${this.gameData.playerEmojis[game.currentPlayerIndex]} **Player ${game.currentPlayerIndex + 1}** landed on \`${this.gameData.fields[newField].card}\` which costs ${this.gameData.fields[newField].price} ${this.gameData.moneyEmoji}\n> Do you want to buy it? (60 Seconds Decition time)`,
+                    content: `${extraText}\n\n${this.gameData.playerEmojis[game.currentPlayerIndex]} **Player ${game.currentPlayerIndex + 1}** landed on \`${this.gameData.fields[newField].card}\` which costs ${this.gameData.fields[newField].price} ${this.gameData.moneyEmoji}\n> Do you want to buy it? (60 Seconds Decision time)`,
                     files: this.gameData.fields[newField].image?.length > 5 ? [new MessageAttachment(this.gameData.fields[newField].image, "field_image.png")] : [],
                     components: [
                         this.getComponentButtonRow([
